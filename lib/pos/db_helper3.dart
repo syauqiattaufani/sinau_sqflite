@@ -24,17 +24,6 @@ class DBHelper3 {
     return _db;
   }
 
-  // Future<Database> sqfliteFfiInit() async {
-  //   Directory documentsDirectory = await getApplicationDocumentsDirectory();
-  //   String path = join(documentsDirectory.path, _databaseName);
-  //   DatabaseFactory databaseFactory = databaseFactoryFfi;
-  //   _db = await databaseFactory.openDatabase(path,
-  //       options: OpenDatabaseOptions(
-  //           onCreate: (db, version) => _createDb(db),
-  //           version: _databaseVersion));
-  //   return _db!;
-  // }
-
   Future<Database?> sqfliteFfiInit() async {
     io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
 
@@ -66,25 +55,6 @@ class DBHelper3 {
         'CREATE TABLE mytable(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, value TEXT)');
   }
 
-  // Future<Database> sqfliteFfiInit2() async {
-  //   Directory documentsDirectory = await getApplicationDocumentsDirectory();
-  //   String path = join(documentsDirectory.path, _databaseName);
-  //   DatabaseFactory databaseFactory = databaseFactoryFfi;
-  //   _db = await databaseFactory.openDatabase(path,
-  //       options: OpenDatabaseOptions(
-  //           onCreate: (Database db, int version) async {
-  //             await db.execute(
-  //                 'CREATE TABLE $table2 ('
-  //                     'id INTEGER PRIMARY KEY, '
-  //                     'name TEXT, '
-  //                     'value INTEGER, '
-  //                     'num REAL)'
-  //             );
-  //           },
-  //           version: _databaseVersion));
-  //   return _db!;
-  // }
-
   //read database
   Future<List<Product3>> getEmployees3() async {
     var dbClient = await db;
@@ -114,18 +84,46 @@ class DBHelper3 {
     return employees;
   }
 
-  Future<Object> getLogin(String code) async {
+  Future<Product3?> getLoginUser(String code, String password) async {
     var dbClient = await db;
-    // var res = await dbClient!.rawQuery("SELECT code FROM cashier_dbf WHERE code = $code");
+    var res = await dbClient!.rawQuery("SELECT code FROM cashier_dbf WHERE code = '$code' and pass = '$password'");
     // var abcd = await dbClient!.query("cashier_dbf");
-    var res = await dbClient?.query("cashier_dbf", where: "code = ", whereArgs: [code]);
+    // var res = await dbClient?.query("cashier_dbf", where: "code = ", whereArgs: [code]);
     // String abc = "SELECT code FROM cashier_dbf WHERE code = $code";
     // var res = await dbClient!.query("cashier_dbf");
-    // if(res.length > 0) {
-    //   return new Product4.fromMap(res.first);
-    // }
-    return res!.isNotEmpty ? Product4.fromMap(res.first) : Null;
-    // return null;
+    if(res.length > 0) {
+      return Product3.fromMap(res.first);
+    }
+
+    return null;
+  }
+
+  Future<Product3?> valCode(String code) async {
+    var dbClient = await db;
+    var res = await dbClient!.rawQuery("SELECT * FROM cashier_dbf WHERE code = '$code'");
+    // var abcd = await dbClient!.query("cashier_dbf");
+    // var res = await dbClient?.query("cashier_dbf", where: "code = ", whereArgs: [code]);
+    // String abc = "SELECT code FROM cashier_dbf WHERE code = $code";
+    // var res = await dbClient!.query("cashier_dbf");
+    if(res.length > 0) {
+      return Product3.fromMap(res.first);
+    }
+    // return res!.isNotEmpty ? Product4.fromMap(res.first) : Null;
+    return null;
+  }
+
+  Future<Product3?> valPass(String pass) async {
+    var dbClient = await db;
+    var res = await dbClient!.rawQuery("SELECT code FROM cashier_dbf WHERE pass = '$pass'");
+    // var abcd = await dbClient!.query("cashier_dbf");
+    // var res = await dbClient?.query("cashier_dbf", where: "code = ", whereArgs: [code]);
+    // String abc = "SELECT code FROM cashier_dbf WHERE code = $code";
+    // var res = await dbClient!.query("cashier_dbf");
+    if(res.length > 0) {
+      return Product3.fromMap(res.first);
+    }
+    // return res!.isNotEmpty ? Product4.fromMap(res.first) : Null;
+    return null;
   }
 
   //create data
